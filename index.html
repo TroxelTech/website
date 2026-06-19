@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TroxelTech • AI Accelerator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0f172a;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-active {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .expertise-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .expertise-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200">
+        <div class="max-w-screen-xl mx-auto px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center">
+                        <span class="text-white font-bold text-2xl tracking-tighter">T</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-2xl tracking-tighter">TroxelTech</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-x-10 text-sm">
+                    <a href="#expertise" class="text-slate-600 hover:text-slate-900 transition-colors">Expertise</a>
+                    <a href="#approach" class="text-slate-600 hover:text-slate-900 transition-colors">Approach</a>
+                    <a href="#team" class="text-slate-600 hover:text-slate-900 transition-colors">Team</a>
+                </div>
+                
+                <div>
+                    <a href="mailto:hello@troxel.tech" 
+                       class="inline-flex items-center px-5 py-2.5 text-sm font-medium bg-slate-900 text-white rounded-2xl hover:bg-slate-800 transition-colors">
+                        Get in touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="max-w-screen-xl mx-auto px-8 pt-20 pb-16">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-x-2 bg-white border border-slate-200 rounded-3xl px-4 py-1.5 mb-8">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span class="text-sm font-medium text-slate-600">AI Accelerator Practice</span>
+            </div>
+            
+            <h1 class="text-6xl tracking-tighter font-semibold leading-none mb-6">
+                AI that actually<br>accelerates your business.
+            </h1>
+            
+            <p class="text-2xl text-slate-600 tracking-tight max-w-xl mb-10">
+                We help established companies adopt AI where it creates real operational leverage.
+            </p>
+            
+            <div class="flex items-center gap-x-4">
+                <a href="mailto:hello@troxel.tech" 
+                   class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold bg-slate-900 text-white rounded-3xl hover:bg-slate-800 transition-all active:scale-[0.985]">
+                    Start a conversation
+                </a>
+                <a href="#expertise" 
+                   class="inline-flex items-center justify-center px-6 py-4 text-base font-medium text-slate-700 hover:text-slate-900 transition-colors">
+                    See our expertise <i class="ml-2 fas fa-arrow-right text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expertise -->
+    <div id="expertise" class="max-w-screen-xl mx-auto px-8 py-16 border-t border-slate-200 bg-white">
+        <div class="max-w-2xl mb-12">
+            <div class="text-emerald-600 text-sm font-semibold tracking-widest mb-3">WHAT WE DO</div>
+            <h2 class="section-header tracking-tighter">Deep expertise.<br>Practical AI application.</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Cards -->
+            <div class="expertise-card bg-slate-50 border border-slate-200 rounded-3xl p-8">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                    <i class="fas fa-cloud text-3xl text-slate-700"></i>
+                </div>
+                <h3 class="font-semibold text-xl tracking-tight mb-3">AWS &amp; Cloud Architecture</h3>
+                <p class="text-slate-600">Enterprise-grade AWS environments, landing zones, and cost-optimized infrastructure.</p>
+            </div>
+            
+            <div class="expertise-card bg-slate-50 border border-slate-200 rounded-3xl p-8">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                    <i class="fas fa-exchange-alt text-3xl text-slate-700"></i>
+                </div>
+                <h3 class="font-semibold text-xl tracking-tight mb-3">EDI &amp; ERP Integration</h3>
+                <p class="text-slate-600">Modernizing legacy EDI flows and connecting ERP systems with intelligent automation.</p>
+            </div>
+            
+            <div class="expertise-card bg-slate-50 border border-slate-200 rounded-3xl p-8">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                    <i class="fas fa-shield-alt text-3xl text-slate-700"></i>
+                </div>
+                <h3 class="font-semibold text-xl tracking-tight mb-3">SecOps &amp; Compliance</h3>
+                <p class="text-slate-600">Security operations, zero-trust architecture, and compliance automation at scale.</p>
+            </div>
+            
+            <div class="expertise-card bg-slate-50 border border-slate-200 rounded-3xl p-8">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                    <i class="fas fa-cogs text-3xl text-slate-700"></i>
+                </div>
+                <h3 class="font-semibold text-xl tracking-tight mb-3">DevOps &amp; Automation</h3>
+                <p class="text-slate-600">Platform engineering, CI/CD modernization, and infrastructure-as-code practices.</p>
+            </div>
+            
+            <div class="expertise-card bg-slate-50 border border-slate-200 rounded-3xl p-8">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                    <i class="fas fa-network-wired text-3xl text-slate-700"></i>
+                </div>
+                <h3 class="font-semibold text-xl tracking-tight mb-3">Networking &amp; Endpoints</h3>
+                <p class="text-slate-600">LAN/WAN design, endpoint management, and secure remote access solutions.</p>
+            </div>
+            
+            <div class="expertise-card bg-slate-50 border border-slate-200 rounded-3xl p-8">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                    <i class="fas fa-brain text-3xl text-slate-700"></i>
+                </div>
+                <h3 class="font-semibold text-xl tracking-tight mb-3">AI Acceleration</h3>
+                <p class="text-slate-600">Identifying high-ROI AI use cases and integrating them into existing operations.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approach / Team -->
+    <div id="approach" class="max-w-screen-xl mx-auto px-8 py-20">
+        <div class="grid md:grid-cols-12 gap-x-12 gap-y-16 items-center">
+            <div class="md:col-span-7">
+                <div class="text-emerald-600 text-sm font-semibold tracking-widest mb-3">OUR APPROACH</div>
+                <h2 class="section-header tracking-tighter mb-6">Not another AI hype team.</h2>
+                <div class="prose prose-lg text-slate-600 max-w-xl">
+                    <p>We only take on work where we can deliver measurable acceleration — faster processes, lower costs, or clearer visibility.</p>
+                    <p class="mt-4">Every engagement starts with understanding your existing systems, constraints, and real operational pain points before any AI is applied.</p>
+                </div>
+            </div>
+            
+            <div id="team" class="md:col-span-5 bg-white border border-slate-200 rounded-3xl p-9">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <div class="flex -space-x-3">
+                        <div class="w-9 h-9 bg-slate-700 rounded-full border-2 border-white"></div>
+                        <div class="w-9 h-9 bg-slate-600 rounded-full border-2 border-white"></div>
+                        <div class="w-9 h-9 bg-slate-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="text-sm font-medium text-slate-500">6 senior practitioners</div>
+                </div>
+                
+                <p class="text-lg leading-snug text-slate-700">
+                    A small team of professionals with 15–20 years each in AWS, EDI, ERP, infrastructure, SecOps, DevOps, and networking — now applying AI where it creates real leverage.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="bg-slate-900 text-white py-20">
+        <div class="max-w-screen-xl mx-auto px-8 text-center">
+            <h2 class="text-4xl tracking-tighter font-semibold mb-4">Ready to explore what AI can actually do for you?</h2>
+            <p class="text-slate-400 text-lg max-w-md mx-auto mb-8">Let's have a direct conversation about your environment and goals.</p>
+            
+            <a href="mailto:hello@troxel.tech" 
+               class="inline-flex items-center justify-center bg-white text-slate-900 font-semibold px-9 py-4 rounded-3xl text-base hover:bg-slate-100 transition-all">
+                Contact TroxelTech
+            </a>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-8">
+        <div class="max-w-screen-xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-y-4 text-sm text-slate-500">
+            <div>© TroxelTech. Practical AI for established companies.</div>
+            <div class="flex gap-x-6">
+                <a href="mailto:hello@troxel.tech" class="hover:text-slate-700">hello@troxel.tech</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
