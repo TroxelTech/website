@@ -17,6 +17,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 772e04f104c62f2049f5f79bc420f1af
           command: pages deploy . --project-name=troxel-tech-dev --branch=main
 
   deploy-prod:
@@ -34,4 +35,5 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 772e04f104c62f2049f5f79bc420f1af
           command: pages deploy . --project-name=troxel-tech --branch=main
