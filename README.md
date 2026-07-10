@@ -7,7 +7,6 @@ Professional website for TroxelTech — an AI Accelerator consulting firm.
 - `index.html` — Main site (single-page, Tailwind)
 - `contact.html` — Contact form page
 - `functions/api/contact.js` — Serverless form handler (Pages Functions)
-- `_redirects` — Clean URL routing
 - `.github/workflows/deploy.yml` — GitHub Actions deployment workflow
 
 ## Deployment Workflow
