@@ -1,0 +1,8 @@
+{
+  "name": "troxel-contact-mailer",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mimetext": "^3.0.27"
+  }
+}

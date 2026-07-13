@@ -10,9 +10,9 @@
  *  - message (required)
  *  - cf-turnstile-response (from Cloudflare Turnstile widget)
  *
- * Environment variables (set in Cloudflare Pages dashboard):
- *  - RESEND_API_KEY
- *  - TURNSTILE_SECRET_KEY
+ * Bindings/env (set on the Pages project):
+ *  - TURNSTILE_SECRET_KEY (secret)
+ *  - MAILER (service binding -> troxel-contact-mailer Worker)
  */
 
 export async function onRequestPost(context) {
@@ -81,90 +81,25 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 2. Send email via Resend
-    if (!env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY is not configured');
+    // 2. Send email via the troxel-contact-mailer Worker (MAILER service
+    // binding), which delivers through Cloudflare Email Routing.
+    if (!env.MAILER) {
+      console.error('MAILER service binding is not configured');
       return Response.json(
         { success: false, error: 'Email service not configured.' },
         { status: 500 }
       );
     }
 
-    const fromAddress = 'TroxelTech <hello@troxel.tech>'; // Update after verifying domain in Resend
-    const toAddress = 'hello@troxel.tech';
-
-    const subject = `New inquiry from troxel.tech — ${name}`;
-
-    // Build a clean, readable email
-    const htmlBody = `
-      <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 620px; margin: 0 auto; padding: 20px;">
-        <h2 style="margin: 0 0 20px; color: #0f172a;">New contact form submission</h2>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-          <tr>
-            <td style="padding: 8px 0; width: 140px; color: #64748b; font-size: 14px;">From</td>
-            <td style="padding: 8px 0; font-weight: 600; color: #0f172a;">${escapeHtml(name)}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Email</td>
-            <td style="padding: 8px 0;"><a href="mailto:${escapeHtml(email)}" style="color: #0f172a;">${escapeHtml(email)}</a></td>
-          </tr>
-          ${company ? `
-          <tr>
-            <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Company</td>
-            <td style="padding: 8px 0; color: #0f172a;">${escapeHtml(company)}</td>
-          </tr>` : ''}
-          ${interest ? `
-          <tr>
-            <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Interest area</td>
-            <td style="padding: 8px 0; color: #0f172a;">${escapeHtml(interest)}</td>
-          </tr>` : ''}
-        </table>
-
-        <div style="margin-bottom: 12px; color: #64748b; font-size: 14px;">Message</div>
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; white-space: pre-wrap; color: #0f172a; line-height: 1.5;">
-${escapeHtml(message)}
-        </div>
-
-        <p style="margin-top: 24px; font-size: 13px; color: #64748b;">
-          Reply directly to this email to respond to ${escapeHtml(email)}.
-        </p>
-      </div>
-    `;
-
-    const textBody = [
-      `New contact form submission on troxel.tech`,
-      ``,
-      `Name: ${name}`,
-      `Email: ${email}`,
-      company ? `Company: ${company}` : null,
-      interest ? `Interest: ${interest}` : null,
-      ``,
-      `Message:`,
-      message,
-      ``,
-      `Reply to: ${email}`
-    ].filter(Boolean).join('\n');
-
-    const resendResponse = await fetch('https://api.resend.com/emails', {
+    const mailerResponse = await env.MAILER.fetch('https://mailer.internal/send', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: fromAddress,
-        to: [toAddress],
-        reply_to: email,
-        subject: subject,
-        html: htmlBody,
-        text: textBody,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, company, interest, message }),
     });
 
-    if (!resendResponse.ok) {
-      const errorText = await resendResponse.text();
-      console.error('Resend API error:', resendResponse.status, errorText);
+    if (!mailerResponse.ok) {
+      const errorText = await mailerResponse.text();
+      console.error('Mailer error:', mailerResponse.status, errorText);
       return Response.json(
         { success: false, error: 'Failed to send your message. Please try again or email us directly.' },
         { status: 502 }
@@ -181,14 +116,4 @@ ${escapeHtml(message)}
       { status: 500 }
     );
   }
-}
-
-// Minimal HTML escaper for safety in the email body
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }

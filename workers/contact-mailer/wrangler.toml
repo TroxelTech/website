@@ -1,0 +1,11 @@
+name = "troxel-contact-mailer"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+# Sends via Cloudflare Email Routing; recipients must be verified destination
+# addresses on the account (mirrors the hello@troxel.tech routing rule).
+send_email = [
+  { name = "EMAIL", allowed_destination_addresses = ["7roxel@gmail.com", "angie@7roxel.net"] }
+]

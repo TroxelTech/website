@@ -47,31 +47,27 @@ Only approved deployments will go live on `troxel.tech`.
 The site now includes a dedicated contact page at `/contact` (or `contact.html`).
 
 - Form collects: name, email, company (optional), area of interest, and message.
-- Protected with **Cloudflare Turnstile**.
-- Submissions are emailed via **Resend**.
-- Future: Google Chat webhook can be added to the same handler in `functions/api/contact.js`.
+- Protected with **Cloudflare Turnstile** (widget "troxel.tech contact form" in the Cloudflare dashboard).
+- Submissions are delivered by the **`troxel-contact-mailer` Worker** (`workers/contact-mailer/`) through **Cloudflare Email Routing** — 100% Cloudflare, no third-party email vendor.
 
-### Setting up the form (one-time)
+### Architecture
 
-1. **Resend**
-   - Sign up at https://resend.com
-   - Verify your sending domain (e.g. `troxel.tech` or a subdomain). This usually requires adding DNS records (SPF + DKIM) in your DNS provider.
-   - Create an API key (start with full access, then restrict later).
-   - Add the key as `RESEND_API_KEY` environment variable in both Cloudflare Pages projects.
-   - Update the `from` address in `functions/api/contact.js` if you prefer a different sender (must be on a verified domain).
+1. `contact.html` renders the form + Turnstile widget and POSTs to `/api/contact`.
+2. `functions/api/contact.js` (Pages Function) validates input and verifies the Turnstile token (`TURNSTILE_SECRET_KEY` env var).
+3. It then calls the private `troxel-contact-mailer` Worker via the `MAILER` service binding.
+4. The Worker sends the email via its Email Routing `send_email` binding to the verified hello@ destination addresses. Recipients must be verified Email Routing destinations; edit `RECIPIENTS` in `workers/contact-mailer/src/index.js` to change them.
 
-2. **Cloudflare Turnstile**
-   - Go to Cloudflare dashboard → Turnstile → Add Site.
-   - Add your domains (including `*.pages.dev` for staging).
-   - Copy the **site key** into `contact.html` (replace `YOUR_TURNSTILE_SITE_KEY`).
-   - Copy the **secret key** into the `TURNSTILE_SECRET_KEY` Pages environment variable.
+The mailer Worker is deliberately private: no routes, no workers.dev subdomain. It is reachable only through the service binding.
 
-3. **Test**
-   - Push to `main` → check staging at https://troxel-tech-dev.pages.dev/contact
-   - Submit the form (use the real keys).
-   - Confirm the email arrives.
+### Deploying the mailer Worker
 
-The form handler lives at `/api/contact` and is implemented with Cloudflare Pages Functions. No additional backend service is required.
+```bash
+cd workers/contact-mailer
+npm install
+npx wrangler deploy   # needs CLOUDFLARE_EMAIL + CLOUDFLARE_API_KEY (or api token) + CLOUDFLARE_ACCOUNT_ID
+```
+
+The site's Pages deploy (GitHub Actions) does NOT deploy the Worker — redeploy it manually after changing `workers/contact-mailer/`.
 
 ## Required Secrets & Environment Variables
 
@@ -80,15 +76,14 @@ The form handler lives at `/api/contact` and is implemented with Cloudflare Page
 |------------------------|--------------------------------------------------|
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token with Pages:Edit permission  |
 
-### Cloudflare Pages Environment Variables (per project)
-These are set in the Cloudflare dashboard under your Pages project → Settings → Environment variables. Configure them for both **Preview** (staging) and **Production**.
+### Cloudflare Pages project settings (per project, Preview + Production)
 
-| Variable                  | Description                                                                 | Where to get it                              |
-|---------------------------|-----------------------------------------------------------------------------|----------------------------------------------|
-| `RESEND_API_KEY`          | API key for sending emails via Resend                                       | resend.com → API Keys                        |
-| `TURNSTILE_SECRET_KEY`    | Secret key for Cloudflare Turnstile (spam protection)                       | Cloudflare dashboard → Turnstile             |
+| Setting                          | Type            | Value                                            |
+|----------------------------------|-----------------|--------------------------------------------------|
+| `TURNSTILE_SECRET_KEY`           | secret env var  | Turnstile widget secret (Cloudflare → Turnstile) |
+| `MAILER`                         | service binding | → Worker `troxel-contact-mailer` (production)    |
 
-> **Note:** The Turnstile *site key* (public) goes directly into `contact.html` (replace `YOUR_TURNSTILE_SITE_KEY`). The secret stays server-side only.
+> The Turnstile *site key* (public) is committed in `contact.html`. The secret stays server-side only. Settings changes only apply to the **next** deployment — re-run the deploy workflow after changing them.
 
 ## Local Development
 
@@ -98,8 +93,8 @@ These are set in the Cloudflare dashboard under your Pages project → Settings 
 ## Tech Stack
 
 - Static HTML + Tailwind CSS (via CDN)
-- Cloudflare Pages + Pages Functions (for the contact form)
-- Resend for transactional email
+- Cloudflare Pages + Pages Functions (form handler) + a private Worker for email
+- Cloudflare Email Routing for outbound contact-form delivery
 - Cloudflare Turnstile for bot protection
 - Hosted on Cloudflare Pages
 - Deployments managed via GitHub Actions
