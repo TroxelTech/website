@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- full-bleed background so the icon works as a maskable icon -->
+  <rect width="512" height="512" fill="#14161c"/>
+  <!-- terminal prompt: chevron + cursor block, kept in the central safe zone -->
+  <text x="150" y="300" font-family="ui-monospace, 'DejaVu Sans Mono', monospace" font-weight="700"
+        font-size="200" fill="#3ddc84" text-anchor="middle">&gt;</text>
+  <rect x="212" y="266" width="118" height="26" rx="7" fill="#3ddc84"/>
+  <text x="256" y="412" font-family="ui-monospace, 'DejaVu Sans Mono', monospace" font-weight="700"
+        font-size="100" fill="#e6e6e6" text-anchor="middle">tt</text>
+</svg>
